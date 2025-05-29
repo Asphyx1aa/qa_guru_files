@@ -21,14 +21,17 @@ public class ZipFilesReadTest {
                 Objects.requireNonNull(cl.getResourceAsStream("resources.zip"))
         )) {
             ZipEntry entry;
+
             while ((entry = zis.getNextEntry()) != null) {
                 if (entry.getName().equals("sample.pdf")) {
                     PDF pdf = new PDF(zis);
                     Assertions.assertTrue(
                             pdf.text.contains("Lorem ipsum dolor sit amet")
                     );
+                    return;
                 }
             }
+            throw new Exception("Файл не найден");
         }
     }
 
@@ -45,8 +48,10 @@ public class ZipFilesReadTest {
                     Assertions.assertEquals(2, data.size());
                     Assertions.assertArrayEquals(new String[]{"John", "Doe", "120 jefferson st.", "Riverside", "NJ", "08075"}, data.get(0));
                     Assertions.assertArrayEquals(new String[]{"Jack", "McGinnis", "220 hobo Av.", "Phila", "PA", "09119"}, data.get(1));
+                    return;
                 }
             }
+            throw new Exception("Файл не найден");
         }
     }
 
@@ -61,8 +66,10 @@ public class ZipFilesReadTest {
                     XLS xls = new XLS(zis);
                     String actualValue = xls.excel.getSheetAt(0).getRow(1).getCell(2).getStringCellValue();
                     Assertions.assertTrue(actualValue.contains("Abril"));
+                    return;
                 }
             }
+            throw new Exception("Файл не найден");
         }
     }
 }
